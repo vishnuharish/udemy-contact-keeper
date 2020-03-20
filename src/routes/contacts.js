@@ -72,15 +72,10 @@ router.put('/:id', authMiddleware, async (req, res) => {
 	try {
 		let contact = await Contact.findById(req.params.id);
 
-		if (!contact)
-			return res
-				.status(404)
-				.json({ errors: [{ contact: 'contact not found' }] });
+		if (!contact) return res.status(404).json({ msg: 'contact not found' });
 
 		if (contact.user.toString() !== req.user.id) {
-			return res
-				.status(401)
-				.json({ errors: [{ contact: 'Unauthorized access' }] });
+			return res.status(401).json({ msg: 'Unauthorized access' });
 		}
 
 		contact = await Contact.findByIdAndUpdate(
@@ -103,15 +98,10 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 	try {
 		let contact = await Contact.findById(req.params.id);
 
-		if (!contact)
-			return res
-				.status(404)
-				.json({ errors: [{ contact: 'contact not found' }] });
+		if (!contact) return res.status(404).json({ msg: 'contact not found' });
 
 		if (contact.user.toString() !== req.user.id) {
-			return res
-				.status(401)
-				.json({ errors: [{ contact: 'Unauthorized access' }] });
+			return res.status(401).json({ msg: 'Unauthorized access' });
 		}
 		await Contact.findByIdAndRemove(req.params.id);
 		res.json({ msg: 'Contact deleted' });

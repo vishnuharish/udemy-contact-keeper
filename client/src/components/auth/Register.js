@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
-
+import React, { useState, useContext, useEffect } from 'react';
+import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
 const Register = () => {
+	const alertContext = useContext(AlertContext);
+	const authContext = useContext(AuthContext);
+	const { setAlert } = alertContext;
+	const { register, error, clearErrors } = authContext;
 	const [user, setUser] = useState({
 		name: '',
 		email: '',
 		password: '',
 		password2: ''
 	});
+
+	useEffect(() => {
+		if (error === 'User already exists') {
+			setAlert(error, 'danger');
+			clearErrors();
+		}
+	}, [error]);
 	const { name, email, password, password2 } = user;
 	const onChange = e => {
 		setUser({ ...user, [e.target.name]: e.target.value });
@@ -14,7 +26,17 @@ const Register = () => {
 	};
 	const onSubmit = e => {
 		e.preventDefault();
-		console.log(user);
+		if (name === '' || email === '' || password === '') {
+			setAlert('Please enter required fields', 'danger');
+		} else if (password !== password2) {
+			setAlert('Password does not match', 'danger');
+		} else {
+			register({
+				name,
+				email,
+				password
+			});
+		}
 	};
 	const onClear = e => {
 		setUser({
@@ -27,7 +49,7 @@ const Register = () => {
 	return (
 		<div className='form-container'>
 			<h1>
-				Account <span className='text-primary'>Login</span>
+				Account <span className='text-primary'>Register</span>
 			</h1>
 			<form onSubmit={onSubmit}>
 				<div className='form-group'>

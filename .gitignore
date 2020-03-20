@@ -1,5 +1,7 @@
 node_modules/
 
+.history/
+
 /client/build
 
 .DS_Store
