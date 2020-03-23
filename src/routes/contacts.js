@@ -49,7 +49,13 @@ router.post(
 				user: req.user.id
 			});
 			const contact = await newContact.save();
-			res.json({ contact });
+			res.json({
+				id: contact.id,
+				name: contact.name,
+				email: contact.email,
+				phone: contact.phone,
+				type: contact.type
+			});
 		} catch (err) {
 			console.log(err);
 			res.status(500).send('Server Error');
@@ -83,7 +89,13 @@ router.put('/:id', authMiddleware, async (req, res) => {
 			{ $set: contactFields },
 			{ new: true }
 		);
-		res.json({ contact });
+		res.json({
+			id: contact.id,
+			name: contact.name,
+			email: contact.email,
+			phone: contact.phone,
+			type: contact.type
+		});
 	} catch (err) {
 		console.log(err);
 		res.status(500).send('Server Error');
