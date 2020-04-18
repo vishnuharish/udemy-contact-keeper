@@ -4,9 +4,10 @@ import ContactContext from '../../context/contacts/ContactContext';
 const ContactItem = ({ contact }) => {
 	const contactContext = useContext(ContactContext);
 	const { deleteContact, setCurrent, clearCurrent } = contactContext;
-	const { id, name, email, type, phone } = contact;
+	const { _id, name, email, type, phone } = contact;
+	console.log(contact);
 	const onDelete = () => {
-		deleteContact(id);
+		deleteContact(_id);
 		clearCurrent();
 	};
 	const onEdit = () => {
@@ -50,7 +51,7 @@ const ContactItem = ({ contact }) => {
 };
 
 ContactItem.propTypes = {
-	contact: PropTypes.object.isRequired
+	contact: PropTypes.object.isRequired,
 };
 
 export default ContactItem;

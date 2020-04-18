@@ -10,9 +10,11 @@ const authMiddleware = require('../middlewares/auth');
 
 router.get('/', authMiddleware, async (req, res) => {
 	try {
-		const contacts = await Contact.find({ user: req.user.id }).sort({
-			date: -1
-		});
+		const contacts = await Contact.find({ user: req.user.id })
+			.select('-date')
+			.sort({
+				date: -1,
+			});
 		res.json({ contacts });
 	} catch (err) {
 		console.log(err);
@@ -28,11 +30,7 @@ router.post(
 	'/',
 	[
 		authMiddleware,
-		[
-			check('name', 'Please enter the name of the contact')
-				.not()
-				.isEmpty()
-		]
+		[check('name', 'Please enter the name of the contact').not().isEmpty()],
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -46,15 +44,15 @@ router.post(
 				email,
 				phone,
 				type,
-				user: req.user.id
+				user: req.user.id,
 			});
 			const contact = await newContact.save();
 			res.json({
-				id: contact.id,
+				_id: contact.id,
 				name: contact.name,
 				email: contact.email,
 				phone: contact.phone,
-				type: contact.type
+				type: contact.type,
 			});
 		} catch (err) {
 			console.log(err);
@@ -90,11 +88,11 @@ router.put('/:id', authMiddleware, async (req, res) => {
 			{ new: true }
 		);
 		res.json({
-			id: contact.id,
+			_id: contact.id,
 			name: contact.name,
 			email: contact.email,
 			phone: contact.phone,
-			type: contact.type
+			type: contact.type,
 		});
 	} catch (err) {
 		console.log(err);
